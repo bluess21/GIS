@@ -1,4 +1,4 @@
-pip install pandas streamlit altair plotly
+##pip install pandas streamlit altair plotly
 
 #import the libraries
 import streamlit as st

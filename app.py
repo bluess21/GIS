@@ -14,8 +14,9 @@ st.set_page_config(
 altair.themes.enable("dark")
 
 # Load CSVs directly from GitHub
-df_2025 = pd.read_csv("/workspaces/GIS/2025-grievances.csv")
-df_2024 = pd.read_csv("/workspaces/GIS/2024-grievances.csv")
+df_2025 = pd.read_csv("https://raw.githubusercontent.com/bluess21/GIS/main/2025-grievances.csv")
+df_2024 = pd.read_csv("https://raw.githubusercontent.com/bluess21/GIS/main/2024-grievances.csv")
+
 
 # Add year column
 df_2025["year"] = 2025

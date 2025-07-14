@@ -1,5 +1,4 @@
 ##pip install pandas streamlit altair plotly
-
 #import the libraries
 import streamlit as st
 import pandas as pd
@@ -15,8 +14,8 @@ st.set_page_config(
 altair.themes.enable("dark")
 
 # Load CSVs directly from GitHub
-df_2025 = pd.read_csv("https://raw.githubusercontent.com/bluess21/GIS/main/2025-grievances.csv")
-df_2024 = pd.read_csv("https://raw.githubusercontent.com/bluess21/GIS/main/2024-grievances.csv")
+df_2025 = pd.read_csv("/workspaces/GIS/2025-grievances.csv")
+df_2024 = pd.read_csv("/workspaces/GIS/2024-grievances.csv")
 
 # Add year column
 df_2025["year"] = 2025
@@ -39,9 +38,12 @@ with st.sidebar:
     category_list = sorted(df_filtered['Category'].dropna().unique())
     selected_category = st.selectbox("Select Category", category_list)
 
-    # Sub-Category
-    sub_category_list = sorted(df_filtered[df_filtered['Sub Category'] == selected_category]['Sub Category'].dropna().unique())
+    #Sub Category
+    sub_category_list = sorted(
+    df_filtered[df_filtered['Category'] == selected_category]['Sub Category'].dropna().unique()
+    )
     selected_sub_category = st.selectbox("Select Sub-Category", sub_category_list)
+
     # Ward Name
     ward_list = sorted(df_filtered['Ward Name'].dropna().unique())
     selected_ward = st.selectbox("Select Ward", ward_list)
@@ -51,6 +53,24 @@ with st.sidebar:
     selected_color_theme = st.selectbox('Select a color theme', color_theme_list)
 
 df_filtered.head()
+
+#Heatmap
+def make_heatmap(input_df, input_y, input_x, input_color, input_color_theme):
+    heatmap = altair.Chart(input_df).mark_rect().encode(
+            y=altair.Y(f'{input_y}:O', axis=altair.Axis(title="Year", titleFontSize=18, titlePadding=15, titleFontWeight=900, labelAngle=0)),
+            x=altair.X(f'{input_x}:O', axis=altair.Axis(title="", titleFontSize=18, titlePadding=15, titleFontWeight=900)),
+            color=altair.Color(f'max({input_color}):Q',
+                             legend=None,
+                             scale=altair.Scale(scheme=input_color_theme)),
+            stroke=altair.value('black'),
+            strokeWidth=altair.value(0.25),
+        ).properties(width=900
+        ).configure_axis(
+        labelFontSize=12,
+        titleFontSize=12
+        ) 
+    # height=300
+    return heatmap
 
 # Apply all filters
 df_final = df_filtered[
@@ -75,7 +95,6 @@ else:
     st.altair_chart(heatmap, use_container_width=True)
 
 
-    import plotly.express as px
 import json
 
 # Load GeoJSON for BBMP wards

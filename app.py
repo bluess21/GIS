@@ -14,11 +14,13 @@ st.set_page_config(
 
 altair.themes.enable("dark")
 
-df_2025 = pd.read_csv('/content/2025-grievances.csv')
-df_2024 = pd.read_csv('/content/2024-grievances.csv')
+# Load CSVs directly from GitHub
+df_2025 = pd.read_csv("https://raw.githubusercontent.com/bluess21/GIS/main/2025-grievances.csv")
+df_2024 = pd.read_csv("https://raw.githubusercontent.com/bluess21/GIS/main/2024-grievances.csv")
 
-df_2025['year'] = 2025
-df_2024['year'] = 2024
+# Add year column
+df_2025["year"] = 2025
+df_2024["year"] = 2024
 
 df_grievances = pd.concat([df_2024, df_2025], ignore_index=True)
 
